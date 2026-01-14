@@ -160,10 +160,10 @@ np.savez_compressed(
 
 ```bash
 # Convert to NumPy
-python -m mat_converter --input dataset.mat --output dataset.npz --format numpy
+python -m mat_converter dataset.mat dataset.npz --format numpy
 
 # Convert to HDF5
-python -m mat_converter --input dataset.mat --output dataset.h5 --format hdf5
+python -m mat_converter dataset.mat dataset.h5 --format hdf5
 
 # Inspect .mat file
 python -m mat_converter --inspect dataset.mat

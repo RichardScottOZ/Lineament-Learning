@@ -509,7 +509,8 @@ class MatConverter:
                 """Recursively load arrays from Zarr group."""
                 for key in group.keys():
                     item = group[key]
-                    if isinstance(item, zarr.core.Array):
+                    # Use duck typing to check if it's an array
+                    if hasattr(item, 'shape') and hasattr(item, '__getitem__'):
                         converted_data[key] = np.array(item[:])
                     else:
                         load_zarr_recursive(item)
@@ -586,7 +587,12 @@ def batch_convert(input_dir: Union[str, Path],
     converter = MatConverter(verbose=True)
     
     # Determine output extension
-    ext = '.npz' if format == 'numpy' else f'.{format}'
+    if format == 'numpy':
+        ext = '.npz'
+    elif format == 'zarr':
+        ext = '.zarr'
+    else:
+        ext = f'.{format}'
     
     for i, mat_file in enumerate(mat_files, 1):
         print(f"\n[{i}/{len(mat_files)}] Converting {mat_file.name}...")
